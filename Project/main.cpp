@@ -25,11 +25,35 @@ using namespace std;
 				cout << "# ERR: " << e.what();\
 				cout << " (MySQL error code: " << e.getErrorCode();\
 				cout << ", SQLState: " << e.getSQLState() << " )" << endl;\
+				system("pause");\
 				}
 
-enum Operater {PROVIDER = 0x100, MEMBER=0x01,MANAGER=0x10 };
+enum Operator { NIL = 0x00,PROVIDER = 0x100, MEMBER=0x01,MANAGER=0x10 };
+enum MemberStatus { FAIL = 0x00 ,VALIDATED, MEMBER_SUSPENDED, SUSPENDED };
 
 
+/* Auxiliary Functions */
+Operator stringToOperator(const string &str) {
+	if (str == "Provider") 
+		return PROVIDER;
+	if (str == "Manager")
+		return MANAGER;
+	if (str == "Member")
+		return MEMBER;
+	return NIL;	
+}
+
+string operatorToString(const Operator& op) {
+	switch (op) {
+	case MANAGER:return string("Manager");
+	case PROVIDER:return string("Provider");
+	case MEMBER:return string("Member");
+	case NIL: 
+	default:return string("NULL");
+	}
+}
+
+/************************/
 class MyConnector {
 public:
 	MyConnector() {
@@ -116,7 +140,7 @@ public:
 		return pwd;
 	}
 	/*
-		success return OPERATOR
+		success return operator id
 		fail return 0;
 	*/
 	int login() {
@@ -130,9 +154,15 @@ public:
 		}
 		char ch = _getch();
 		while (ch != 13) {
-			password.push_back(ch);
-			cout << "*";
-			ch = _getch();
+			//Backward
+			if (ch == 8) {
+				password.pop_back();
+				printf("%c %c", 8,8);
+			} else {
+				password.push_back(ch);
+				cout << "*";
+			}
+				ch = _getch();			
 		}
 		if (!validatePassword(password)) {
 			cout << "Not validated password" << endl;
@@ -147,9 +177,8 @@ public:
 			if (MC.res->next()) {
 				string dbPWD = MC.res->getString("pwd");
 				if (dbPWD == password) {
-					//TODO return type according result.type
-					printf("Login successful! Your Identity is :%s", "provider");
-					return PROVIDER;
+					int id = atoi(MC.res->getString("id").c_str());
+					return id;
 				}
 			} else {
 				return 0;
@@ -161,79 +190,76 @@ public:
 
 class Verify{
 public:
-	int verify(LoginMessage msg) {
+	MemberStatus stringToMS(const string &str)const {
+		if (str == "VALIDATED")
+			return VALIDATED;
+		if (str == "MEMBER_SUSPENDED")
+			return MEMBER_SUSPENDED;
+		if (str == "SUSPENDED")
+			return SUSPENDED;
+		return MemberStatus::FAIL;
+	}
+	int checkFormat(const string &strNumber)const {
 		return 1;
+	}
+	MemberStatus verify(const string& strNumber)const {
+		if (!checkFormat(strNumber)) {
+			return FAIL;
+		}
+		int memberNumber = stoi(strNumber);
+		try {
+			MyConnector MC;
+			// Look in the DB, get the status
+			MC.res = MC.stmt->executeQuery("select status from member where id = " + to_string(memberNumber));
+			if (MC.res->next()) {
+				MemberStatus MS = stringToMS(MC.res->getString(1));
+				return MS;
+			}
+		}CATCHSQL;
 	}
 	
 };
 
 class Service {
 private:
+	int serviceID;
 	string serviceName;
-	int serviceCode;
-	int m_root;
-
+	double serviceFee;
 public:
-	bool operator <(const Service &l)const {
-		return (l.serviceCode < serviceCode);
-	}
-public:
-	string name() {
-		return serviceName;
-	}
-	int code() {
-		return serviceCode;
-	}
-	int root() { return m_root; }
+	int getID() { return serviceID; }
+	string getName() { return serviceName; }
+	double getFee() { return serviceFee; }
 
-	void print() {
-		printf("Service Name:%s\n"
-			"Service Code:%d\n", serviceName.c_str(), serviceCode);
-	}
-
-public:
-	Service(string Name, int Code, int root = 0) {
-		serviceName = Name;
-		serviceCode = Code;
-		m_root = root;
-	}
-	Service() :serviceCode(0), serviceName(string()), m_root(0) {}
-};
-
-
-set<Service> g_serviceDirectory;
-
-void createService() {
-	g_serviceDirectory.insert(Service("ÒûÊ³¿ØÖÆ", 1001, 1000));
-}
-
-
-class ServiceCenter {
-public:
-	void getAllServices() {
-		for (auto i : g_serviceDirectory) {
-			i.print();
-		}
-	}
-	Service getServiceByCode() {
-
-	}
+	Service() :serviceID(0), serviceName(""), serviceFee(0) {}
 };
 
 class CASystem {
 private:
-	Operater curOperator;
+	Operator curOperator;
+	int curOperatorID;
+	Member member;
+	MemberStatus MS;
+
 public:
-	Operater getCurOperator() { return curOperator; }
+	CASystem() {
+		curOperator = Operator::NIL;
+		curOperatorID = 0;
+		MS = MemberStatus::FAIL;
+	}
+	Operator getCurOperator() { return curOperator; }
+	int getOperatorID() { return curOperatorID; }
 	ServiceCenter SC;
 	vector<Member> members;
 	vector<Provider> providers;
 	void showInstructions() {
 		int i=0;
+		printf("You are Logged in as:%s, your ID is:%d\n", operatorToString(curOperator).c_str(),curOperatorID);
+		//TODO:Member Info
+		printf("You are dealing with the member:\n");
 		printf("\n\n");
 		// 0
-		printf("[%d]:Save & Exit\n", i); i++;
-		printf("[%d]:Show All Services\n", i); i++;
+		printf("[%d]:Login & Relogin\n", i); i++;
+		printf("[%d]:Login Member\n", i); i++;
 		printf("[%d]:Generate Bills\n", i); i++;
 		printf("[%d]:Save & Exit\n", i); i++;
 		printf("[%d]:Save & Exit\n", i); i++;
@@ -243,36 +269,52 @@ public:
 	
 public:
 	void Run() {
-		Login L;
-		int cmd = 0;
-		int loginFailtimes = 0;
-		while (!L.login()) {
-			cout << "wrong login information, Try again" << endl;
-			loginFailtimes++;
-			if (loginFailtimes >= 5) {
-				cout << "EXIT.." << endl;
-				cmd = -1;
+		try {
+			MyConnector MC;
+			int cmd = 0;
+			int manCmd = 1;
+			while (1) {
+				if (!manCmd) {
+					showInstructions();
+					scanf("%d", &cmd);
+				} else	manCmd = 0;
+				switch (cmd) {
+				case 0:
+					/* Login and get the operator info */
+					Login L;
+					while ((curOperatorID = L.login()) == NULL) {
+						cout << "wrong login information, Try again" << endl;
+					}
+					/* Login successful, get curOperator */
+					MC.res = MC.stmt->executeQuery("select Type from provider where id = " + to_string(curOperatorID));
+					if (MC.res->next()) {
+						curOperator = stringToOperator(MC.res->getString("type"));
+					}
+					printf("Login successful! Your ID is :%d %s\n", curOperatorID, operatorToString(curOperator).c_str());
+					break;
+				case 1://TODO
+				{
+					/* Read Membercard and verify */
+					// Input the member# instead of read it by reading member card 
+					int memberNumber;
+					string strMemberNumber;
+					Verify verify;
+					cout << "Input Member Number:";
+					cin >> strMemberNumber;
+					//TODO:verify....
+					//Verify Success
+					//print Member information
+					if (verify.verify(strMemberNumber) == MemberStatus::FAIL) {
+						// Say the reason
+					}
+				}break;
+				case 2:break;
+				case 3:break;
+				default:break;
+				}
 			}
-		}
+		}CATCHSQL;
 
-		if (cmd == -1) {
-			//exit
-			return;
-		}
-		while (1) {
-			showInstructions();
-			scanf("%d", &cmd);
-			switch (cmd) {
-			case 0:
-				break;
-			case 1:
-				printf("Show All Services\n");
-				SC.getAllServices(); break;
-			case 2:break;
-			case 3:break;
-			default:break;
-			}
-		}		
 	}
 	void readFile() {
 		FILE *fp;
@@ -297,10 +339,6 @@ public:
 	}
 protected:
 };
-void initial_test() {
-	createService();
-}
-
 
 
 
@@ -342,10 +380,7 @@ void myConnectionSQL() {
 }
 
 int main() {
-	CASystem CC;
-
-	initial_test();
-	
+	CASystem CC;	
 	CC.Run();
 
 	return EXIT_SUCCESS;

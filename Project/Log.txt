@@ -4,3 +4,10 @@
 	更新函数有
 		Login
 		Regex 匹配用户名和密码
+
+2015年11月11日
+	完成了login，包括provider的login，和member的login
+	bill directory的信息不能只存member id和provider id，因为这样会同步。同步的结果是，如果某个信息更改了，bill的信息也会随之更改，
+		它只是一个日志文件，记录的必定是当时的信息，不是最新信息。
+
+

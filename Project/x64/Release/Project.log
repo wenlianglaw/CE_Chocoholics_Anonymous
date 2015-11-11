@@ -1,19 +1,20 @@
-﻿生成启动时间为 11/10/2015 7:55:39 PM。
+﻿生成启动时间为 11/11/2015 5:15:38 PM。
      1>项目“D:\Documents\Homework_GRAD\Computer Engineering\Real Program\Project\Project\Project.vcxproj”在节点 2 上(Build 个目标)。
      1>ClCompile:
          D:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W3 /WX- /sdl /O2 /Oi /GL /D CPPCONN_PUBLIC_FUNC= /D _CRT_SECURE_NO_WARNINGS /D _MBCS /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"x64\Release\\" /Fd"x64\Release\vc140.pdb" /Gd /TP /errorReport:prompt main.cpp
          main.cpp
          Unknown compiler version - please run the configure tests and report the results
+     1>main.cpp(335): warning C4101: “memberNumber”: 未引用的局部变量
        Link:
          D:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"D:\Documents\Homework_GRAD\Computer Engineering\Real Program\Project\x64\Release\Project.exe" /NOLOGO mysqlcppconn.lib libmysql.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"D:\Documents\Homework_GRAD\Computer Engineering\Real Program\Project\x64\Release\Project.pdb" /OPT:REF /OPT:ICF /LTCG:incremental /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\Documents\Homework_GRAD\Computer Engineering\Real Program\Project\x64\Release\Project.lib" /MACHINE:X64 x64\Release\main.obj
          正在生成代码
-         2 of 389 functions ( 0.5%) were compiled, the rest were copied from previous compilation.
+         9 of 363 functions ( 2.5%) were compiled, the rest were copied from previous compilation.
            0 functions were new in current compilation
-           3 functions had inline decision re-evaluated but remain unchanged
+           51 functions had inline decision re-evaluated but remain unchanged
          已完成代码的生成
          Project.vcxproj -> D:\Documents\Homework_GRAD\Computer Engineering\Real Program\Project\x64\Release\Project.exe
      1>已完成生成项目“D:\Documents\Homework_GRAD\Computer Engineering\Real Program\Project\Project\Project.vcxproj”(Build 个目标)的操作。
 
 已成功生成。
 
-已用时间 00:00:00.94
+已用时间 00:00:01.19
