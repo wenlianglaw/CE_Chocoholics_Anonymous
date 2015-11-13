@@ -1,2 +1,95 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ClassDiagram /> 
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="MyConnector">
+    <Position X="14" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAIAAQCAADAAAgAAAAAAAAAAAAE=</HashCode>
+      <FileName>main.cpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Member">
+    <Position X="6.75" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAQAAAAAAAAAAAAAAAAAAAAAMAAAAAAAEAAAAAAA=</HashCode>
+      <FileName>main.cpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Provider">
+    <Position X="1.5" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAEAAAAAAAEAAAAAAAEAAAAAAAEAAAAAAA=</HashCode>
+      <FileName>main.cpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Login">
+    <Position X="13.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAIAAAAAAAAQAAAAAAAAAAAAAAAAAAAAEAA=</HashCode>
+      <FileName>main.cpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Verify">
+    <Position X="12" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAABAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>main.cpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Service">
+    <Position X="4.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAEAAAAAAAAAACgAAAAAAAAAAAASAAAAAgEAAAAAAA=</HashCode>
+      <FileName>main.cpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CASystem">
+    <Position X="8.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAQAAAAAAAAIAgAAAAAACBAAAAYACAAAAAACQAI=</HashCode>
+      <FileName>main.cpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bill" Collapsed="true">
+    <Position X="3.5" Y="5" Width="1.5" />
+    <InheritanceLine Type="Service">
+      <InheritanceModifierLabel ManuallyPlaced="true">
+        <Position X="-0.452" Y="0.966" />
+      </InheritanceModifierLabel>
+    </InheritanceLine>
+    <InheritanceLine Type="Provider">
+      <InheritanceModifierLabel ManuallyPlaced="true">
+        <Position X="0.537" Y="0.175" />
+      </InheritanceModifierLabel>
+    </InheritanceLine>
+    <InheritanceLine Type="Member" ManuallyRouted="true">
+      <Path>
+        <Point X="7.5" Y="3.132" />
+        <Point X="7.5" Y="4.653" />
+        <Point X="4.25" Y="4.653" />
+        <Point X="4.25" Y="5" />
+      </Path>
+      <InheritanceModifierLabel ManuallyPlaced="true">
+        <Position X="-1.098" Y="0.06" />
+      </InheritanceModifierLabel>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAAAAAAAAAQEAAAAAAAEAEAoAABAAAAEAA=</HashCode>
+      <FileName>main.cpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="Operator">
+    <Position X="12.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAACAAAAAAAAAAAAAAQAAAAAAAAAAAQAAAAAI=</HashCode>
+      <FileName>main.cpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="MemberStatus">
+    <Position X="12.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAAAAAAAAQAAAAAAAAAAAAAAEAAAAAAACA=</HashCode>
+      <FileName>main.cpp</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

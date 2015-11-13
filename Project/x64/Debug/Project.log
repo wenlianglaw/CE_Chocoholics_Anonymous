@@ -1,15 +1,19 @@
-﻿生成启动时间为 11/10/2015 7:43:04 PM。
+﻿生成启动时间为 11/12/2015 6:36:05 PM。
      1>项目“D:\Documents\Homework_GRAD\Computer Engineering\Real Program\Project\Project\Project.vcxproj”在节点 2 上(Build 个目标)。
      1>ClCompile:
-         D:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /D CPPCONN_PUBLIC_FUNC= /D _CRT_SECURE_NO_WARNINGS /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"x64\Debug\\" /Fd"x64\Debug\vc140.pdb" /Gd /TP /errorReport:prompt main.cpp
+         D:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /D CPPCONN_PUBLIC_FUNC= /D _CRT_SECURE_NO_WARNINGS /D CPPCONN_PUBLIC_FUNC= /D _CRT_SECURE_NO_WARNINGS /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"x64\Debug\\" /Fd"x64\Debug\vc140.pdb" /Gd /TP /errorReport:prompt main.cpp
          main.cpp
-         Unknown compiler version - please run the configure tests and report the results
-     1>d:\documents\homework_grad\computer engineering\real program\project\project\main.cpp(153): warning C4715: “Login::login”: 不是所有的控件路径都返回值
+     1>f:\sdk\mysql++\3.2.2\include\exceptions.h(46): warning C4275: 非 dll 接口 class“std::exception”用作 dll 接口 class“mysqlpp::Exception”的基
+         d:\program files (x86)\microsoft visual studio 14.0\vc\include\vcruntime_exception.h(43): note: 参见“std::exception”的声明
+         f:\sdk\mysql++\3.2.2\include\exceptions.h(45): note: 参见“mysqlpp::Exception”的声明
+     1>d:\documents\homework_grad\computer engineering\real program\project\project\main.cpp(318): warning C4101: “memberNumber”: 未引用的局部变量
+     1>d:\documents\homework_grad\computer engineering\real program\project\project\main.cpp(218): warning C4715: “Verify::verify”: 不是所有的控件路径都返回值
        Link:
-         D:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"D:\Documents\Homework_GRAD\Computer Engineering\Real Program\Project\x64\Debug\Project.exe" /INCREMENTAL /NOLOGO mysqlcppconn.lib libmysql.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"D:\Documents\Homework_GRAD\Computer Engineering\Real Program\Project\x64\Debug\Project.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\Documents\Homework_GRAD\Computer Engineering\Real Program\Project\x64\Debug\Project.lib" /MACHINE:X64 x64\Debug\main.obj
+         D:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"D:\Documents\Homework_GRAD\Computer Engineering\Real Program\Project\x64\Debug\Project.exe" /INCREMENTAL:NO /NOLOGO mysqlpp.lib winmm.lib mysqlcppconn.lib libmysql.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"D:\Documents\Homework_GRAD\Computer Engineering\Real Program\Project\x64\Debug\Project.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\Documents\Homework_GRAD\Computer Engineering\Real Program\Project\x64\Debug\Project.lib" /MACHINE:X64 x64\Debug\main.obj
+     1>main.obj : warning LNK4075: 忽略“/EDITANDCONTINUE”(由于“/OPT:LBR”规范)
          Project.vcxproj -> D:\Documents\Homework_GRAD\Computer Engineering\Real Program\Project\x64\Debug\Project.exe
      1>已完成生成项目“D:\Documents\Homework_GRAD\Computer Engineering\Real Program\Project\Project\Project.vcxproj”(Build 个目标)的操作。
 
 已成功生成。
 
-已用时间 00:00:00.98
+已用时间 00:00:01.90

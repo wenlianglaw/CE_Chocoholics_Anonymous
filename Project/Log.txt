@@ -9,5 +9,35 @@
 	完成了login，包括provider的login，和member的login
 	bill directory的信息不能只存member id和provider id，因为这样会同步。同步的结果是，如果某个信息更改了，bill的信息也会随之更改，
 		它只是一个日志文件，记录的必定是当时的信息，不是最新信息。
+	Mysql出现了问题：它只能够读取没有空格的内容，如果试图读取有空格的内容，会出现错误。
 
+2015年11月12日
+	After TWO DAYS debugging, I still couldn't found the reason why I cannot read more than 15 characters from database.
+	15 characters    OK
+	16+ characters   Crushed
+
+	I searched for the solution on the internet until 1:00 a.m., the time that our library closes at. Still no solution provided.
+	Then I tried to use another library, MySQL++.
+	New trouble comes, its so hard to compile because VS 2015 support new C++ standard and has constrained some functions. I need to 
+	modify the source code. And I think everybody hates to build a new environment due to its trouble.
+	I worked whole day, and MySQL++ works fine now.
+
+	How to compile MySQL++:
+	1. Open the VS2008 Project
+	2. Add the "MySQL Server xx\lib" and "MySQL Server xx\include path"
+	3. Add the "MySQL Connector lib and path"
+	4. Comment the 
+		#define snprintf _snprintf
+	   Code in the common.h, that is, add // in front of this code.
+	5. Change all snprintf to _snprintf in whole project.
+	6. Just compile mysqlpp project, if success, you will get mysqlpp.lib and mysqlpp.dll. If you compile it on Debug mode, the name will be mysqlpp_d.(dll|lib)
+	7. Set RuntimeLibrary to /MTD in your own project.
+
+	These steps cost me more than 24 hrs.
+
+
+	Tested the MySQL++, workds fine.
+	
+	TODO:
+	Change all id's type from number to string. Because a number can be very long, though the requirement limits the length of number to 9 digits, it may be expanded in further.
 
