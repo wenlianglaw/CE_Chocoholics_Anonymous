@@ -15,6 +15,10 @@
 using namespace mysqlpp;
 using namespace std;
 
+
+//TODO High level:
+// Change all id to string.
+
 #define CATCHSQL catch (exception &e) {\
 				cout << "# ERR: SQLException in " << __FILE__;\
 				cout << "(" << __FUNCTION__ << ") on line " << __LINE__ << endl;\
@@ -87,9 +91,9 @@ public:
 
 
 class Member {
-private:
+protected:
 	string name;
-	unsigned int memberID;
+	unsigned int memberID; // default 0
 public:
 	string getName() { return name; }
 	unsigned int getMemberID() { return memberID; }
@@ -102,7 +106,7 @@ public:
 };
 
 class Provider {
-private:
+protected:
 	string name;
 	unsigned int providerId;
 public:
@@ -263,16 +267,19 @@ private:
 	BillStatus billStatus;
 
 public:
-	void writeComments() {}
+	void writeComments(const string &comments) { strComments = comments; }
 	void setCurTime(const string &ct) { curTime = ct; }
 	void setDateSProvided(const string &dt) { dateSProvided = dt; }
-	void setBillStatus() {}
+	void setBillStatus(const BillStatus &bs) { billStatus = bs; }
 
 	string getComments()const { return strComments; }
 	string getCurTime()const { return curTime; }
 	string getDateProvided()const { return dateSProvided; }
 	BillStatus getBillStatus()const { return billStatus; }
 
+	void setProviderNum(unsigned int num) { providerId = num; }
+	void setMemberNum(unsigned int num) { memberID = num;  }
+	void setService(const Service &s){  }
 	static int addBillToDB(const Bill &bill) {}
 
 
@@ -311,12 +318,63 @@ public:
 		printf("[%d]:Generate Bills\n", i); i++;
 		printf("[%d]:Query Service\n", i); i++;
 		printf("[%d]:Save & Exit\n", i); i++;
-		printf("\n\n\n\n");
-		if (!strEnd.empty()) {  cout << strEnd << endl; strEnd = string(); }
+		printf("\n\n");
+		if (!strEnd.empty()) {  cout << strEnd << endl<<endl; strEnd = string(); }
+		else { cout << endl << endl; }
 		// 5
 	}
 	
 public:
+	// return num of rows
+	int lookUpServices(string pattern = "") {
+		StoreQueryResult res;
+		try {
+			MyConnector MC;
+			if (pattern == "")	cin >> pattern;
+			regex digits("[[:digit:]]+");
+			regex name("([[:w:]]|[[:s:]]|[*.%])+");
+			if (regex_match(pattern, digits)) {
+				// Search by Service ID
+				Query query = MC.conn.query("select * from service_directory where id = " + pattern);
+				MC.res = query.store();
+			} else if (regex_match(pattern, name)) {
+				// Search by Service Name
+				Query query = MC.conn.query("select * from service_directory where name like '%" + pattern + "%'");
+				MC.res = query.store();
+			} else {
+				strEnd.assign("wrong input.\n");
+			}
+			if (MC.res.size()) {
+				// Print all
+				//id
+				cout << std::setw(12) << std::left << MC.res.field_name(0);
+				//Name
+				cout << std::setw(30) << std::left << MC.res.field_name(1);
+				//Price
+				cout << std::setw(12) << std::left << MC.res.field_name(2);
+				for (unsigned int i = 3; i < MC.res.num_fields(); i++) {
+					cout << std::setw(18) << std::left << MC.res.field_name(i);
+				}
+				cout << endl;
+				for (auto it : MC.res) {
+					cout << std::setw(12) << std::left << it[0];
+					cout << std::setw(30) << std::left << it[1];
+					cout << std::setw(12) << std::left << it[2];
+					for (unsigned int i = 3; i < MC.res.num_fields(); i++) {
+						cout << std::setw(18) << std::left
+							<< it[i];
+					}
+					cout << endl;
+				}
+				return MC.res.size();
+			} else {
+				strEnd.assign("Couldn't find the matched service\n");
+				return 0;
+			}
+		}CATCHSQL;
+		return 0;
+	}
+
 	void Run() {
 		try {
 			MyConnector MC;
@@ -404,53 +462,46 @@ public:
 							getline(cin, dateProvided);
 						}
 					}
-					if(bill.get)
-					
+					// The whole process was cancled
+					if (bill.getDateProvided().empty()) { strEnd.assign("Cancel creating.." ); break; }
+					// set Provider number
+					bill.setProviderNum(curOperatorID);
+					//set Member number
+					bill.setMemberNum(member.getMemberID());
+					cout << "ProviderID:" << curOperatorID << "   MemberID:" << member.getMemberID() << endl;
+					// select the service
+					bool enterScode = true;
+					while (enterScode) {
+						cout << endl<<"Enter service:";
+						string pattern = "";
+						getline(cin, pattern);
+						cout << endl;
+						while (lookUpServices(pattern) != 1 && pattern != "-1") {
+							cout << "Enter service, -1 to cancel:";
+							getline(cin, pattern);
+							cout << endl;
+						}
+						if (pattern == "-1") { strEnd.assign("Cancel creating.."); break; }
+						cout <<endl<< "Is this service you are looking for?  ";
+						cout << "y/any key" << endl<<endl;
+						char ch;
+						ch = getchar();
+						if (ch == 'y' || ch == 'Y') {
+							// Assign Service
+							enterScode = false;
+						}
+
+						// Add Comments
+						//TODO
+						// Insert into DB
+						//TODO
+					}
+						
 				}break;
 				case 3: {
 					// Query Services
-					StoreQueryResult res;
-					//grant(Operator::MANAGER | PROVIDER);
-					string pattern;
-					cin >> pattern;
-					regex digits("[[:digit:]]+");
-					regex name("([[:w:]]|[[:s:]]|[*.%])+");
-					if (regex_match(pattern, digits)) {
-						// Search by Service ID
-						Query query = MC.conn.query("select * from service_directory where id = " + pattern);
-						MC.res = query.store();
-					}else if (regex_match(pattern, name)) {
-						// Search by Service Name
-						Query query = MC.conn.query("select * from service_directory where name like '%" + pattern + "%'");
-						MC.res = query.store();
-					} else {
-						strEnd.assign("wrong input.\n");
-					}
-					if (MC.res.size()) {
-						// Print all
-						//id
-						cout << std::setw(12)<<std::left<< MC.res.field_name(0);
-						//Name
-						cout << std::setw(30) << std::left << MC.res.field_name(1);
-						//Price
-						cout << std::setw(12) << std::left << MC.res.field_name(2);
-						for (unsigned int i = 3; i < MC.res.num_fields(); i++) {
-							cout << std::setw(18) << std::left << MC.res.field_name(i);
-						}
-						cout << endl;
-						for (auto it : MC.res) {
-							cout << std::setw(12) << std::left << it[0];
-							cout << std::setw(30) << std::left << it[1];
-							cout << std::setw(12) << std::left << it[2];
-							for (unsigned int i = 3; i < MC.res.num_fields(); i++) {
-								cout << std::setw(18)<<std::left
-									<<it[i];
-							}
-							cout << endl;
-						}
-					} else {
-						strEnd.assign("Couldn't find the matched service\n");
-					}
+					grant(Operator::MANAGER | PROVIDER);
+					lookUpServices();
 				}
 					break;						
 				default:
